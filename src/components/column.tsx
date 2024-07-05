@@ -1,18 +1,23 @@
-import { ITask } from "../types"
+import { Column as ColumnType } from "../utils/types"
 import Task from "./task"
 
 interface ColumnProps {
-	name: string
-	tasks: ITask[]
+	column: ColumnType
 }
 
-const Column: React.FC<ColumnProps> = ({ name, tasks }) => {
+const Column: React.FC<ColumnProps> = ({ column }) => {
 	return (
-		<div>
-			<h2>{name}</h2>
-			<div>
-				{tasks.map((task) => (
-					<Task {...task} />
+		<div className="min-w-[280px]">
+			<h2 className="text-heading-s uppercase mt-3 mb-6">
+				{column.name} ({column.tasks.length})
+			</h2>
+			<div className="flex flex-col gap-5">
+				{column.tasks.map((task) => (
+					<Task
+						key={task.title}
+						task={task}
+						columnName={column.name}
+					/>
 				))}
 			</div>
 		</div>

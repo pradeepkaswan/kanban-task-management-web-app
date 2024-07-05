@@ -3,6 +3,12 @@ export default {
 	darkMode: "class",
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
+		container: {
+			padding: {
+				DEFAULT: "1rem",
+				md: "1.5rem",
+			},
+		},
 		colors: {
 			transparent: "transparent",
 			primary: {
@@ -54,6 +60,7 @@ export default {
 				{
 					lineHeight: "15px",
 					fontWeight: "700",
+					letterSpacing: "2.4px",
 				},
 			],
 			"body-l": [

@@ -1,32 +1,63 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { IBoard } from "../types"
+import { Board } from "../utils/types"
+import data from "../utils/data.json"
 
 interface BoardState {
-	boards: IBoard[]
-	currentBoard: string | null
-	addBoard: (board: IBoard) => void
-	updateBoard: (board: IBoard) => void
-	deleteBoard: (boardId: string) => void
-	setCurrentBoard: (boardId: string) => void
+	boards: Board[]
+	currentBoard: string
+	addBoard: (board: Board) => void
+	updateBoard: (board: Board) => void
+	deleteBoard: (boardName: string) => void
+	setCurrentBoard: (boardName: string) => void
+	moveTask: (taskTitle: string, fromColumn: string, toColumn: string) => void
 }
+
+localStorage.removeItem("board-storage")
 
 const useBoardStore = create<BoardState>()(
 	persist(
 		(set) => ({
-			boards: [],
-			currentBoard: null,
+			boards: data.boards as Board[],
+			currentBoard: data.boards[0].name,
 			addBoard: (board) =>
 				set((state) => ({ boards: [...state.boards, board] })),
-			updateBoard: (board) =>
+			updateBoard: (updatedBoard) =>
 				set((state) => ({
-					boards: state.boards.map((b) => (b.id === board.id ? board : b)),
+					boards: state.boards.map((board) =>
+						board.name === updatedBoard.name ? updatedBoard : board,
+					),
 				})),
-			deleteBoard: (boardId) =>
+			deleteBoard: (boardName) =>
 				set((state) => ({
-					boards: state.boards.filter((b) => b.id !== boardId),
+					boards: state.boards.filter((board) => board.name !== boardName),
 				})),
-			setCurrentBoard: (boardId) => set({ currentBoard: boardId }),
+			setCurrentBoard: (boardName) => set({ currentBoard: boardName }),
+			moveTask: (taskTitle, fromColumn, toColumn) =>
+				set((state) => {
+					const currentBoardIndex = state.boards.findIndex(
+						(board) => board.name === state.currentBoard,
+					)
+					const updatedBoard = { ...state.boards[currentBoardIndex] }
+					const fromColumnIndex = updatedBoard.columns.findIndex(
+						(col) => col.name === fromColumn,
+					)
+					const toColumnIndex = updatedBoard.columns.findIndex(
+						(col) => col.name === toColumn,
+					)
+					const taskIndex = updatedBoard.columns[
+						fromColumnIndex
+					].tasks.findIndex((task) => task.title === taskTitle)
+					const [task] = updatedBoard.columns[fromColumnIndex].tasks.splice(
+						taskIndex,
+						1,
+					)
+					task.status = toColumn
+					updatedBoard.columns[toColumnIndex].tasks.push(task)
+					const newBoards = [...state.boards]
+					newBoards[currentBoardIndex] = updatedBoard
+					return { boards: newBoards }
+				}),
 		}),
 		{
 			name: "board-storage",

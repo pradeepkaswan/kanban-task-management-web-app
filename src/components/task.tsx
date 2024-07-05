@@ -1,17 +1,27 @@
-import { ITask } from "../types"
+import { Task as TaskType } from "../utils/types"
 
-const Task: React.FC<ITask> = ({ title }) => {
-	// const completedTasks = subTasks.filter(
-	// 	(subTask) => subTask.isCompleted,
-	// ).length
+interface TaskProps {
+	task: TaskType
+	columnName: string
+}
 
-	const completedTasks = 5
-	const subTasks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const Task: React.FC<TaskProps> = ({ task }) => {
+	// const { boards, currentBoard, moveTask } = useBoardStore()
+	// const board = boards.find((b) => b.name === currentBoard)
+
+	const completedTasks = task.subtasks.filter(
+		(subtask) => subtask.isCompleted,
+	).length
 
 	return (
-		<div className="px-4 py-6 bg-neutral-100">
-			<h3>{title}</h3>
-			<p>{`${completedTasks} of ${subTasks.length} subtasks`}</p>
+		<div
+			draggable
+			className="flex flex-col gap-2 px-4 py-6  bg-neutral-100 dark:bg-neutral-600 rounded-lg shadow-[0_4px_6px_0px_rgba(54,78,126,0.10)]"
+		>
+			<h3 className="text-heading-m text-neutral-800 dark:text-neutral-100">
+				{task.title}
+			</h3>
+			<p>{`${completedTasks} of ${task.subtasks.length} subtasks`}</p>
 		</div>
 	)
 }
