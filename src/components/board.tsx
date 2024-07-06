@@ -16,7 +16,7 @@ const Board: React.FC = () => {
 					column={column}
 				/>
 			))}
-			<div className="flex justify-center items-center min-w-[280px] rounded-md bg-gradient-to-b from-[#E9EFFA] to-[rgba(233,239,250,0.50)] ">
+			<div className="flex justify-center items-center min-w-[280px] rounded-md bg-light-gradient dark:bg-dark-gradient">
 				<button className="flex">
 					<Icons.add /> New Column
 				</button>

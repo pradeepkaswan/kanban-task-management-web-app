@@ -10,6 +10,8 @@ interface BoardState {
 	updateBoard: (board: Board) => void
 	deleteBoard: (boardName: string) => void
 	setCurrentBoard: (boardName: string) => void
+	// addColumn: (column: Column) => void
+	// addTask: (task: Task) => void
 	moveTask: (taskTitle: string, fromColumn: string, toColumn: string) => void
 }
 

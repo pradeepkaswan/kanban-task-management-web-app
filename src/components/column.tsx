@@ -8,7 +8,7 @@ interface ColumnProps {
 const Column: React.FC<ColumnProps> = ({ column }) => {
 	return (
 		<div className="min-w-[280px]">
-			<h2 className="text-heading-s uppercase mt-3 mb-6">
+			<h2 className="text-heading-s uppercase my-6">
 				{column.name} ({column.tasks.length})
 			</h2>
 			<div className="flex flex-col gap-5">
